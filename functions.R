@@ -1,6 +1,15 @@
 library(tm)
+library(GenomicRanges)
 
 
+
+#' Sorts input frame in ascending order according to start
+#' removes duplicates and values in which the p value is > pval  
+#' In df$motif, substitutes all :', '-' and '_' chars with 'X'
+#' 
+#' @param df Input data frame in lasagne output format
+#' @param pval maximum pval to keep
+#' @return df 
 processSingle  <- function(df, pval=0.01){
     df=subset(df, p_value < pval) 
     # order by start
@@ -26,6 +35,12 @@ randomize <- function(df){
     return(newdf)
 }
 
+#' Adds width and bin columns to input data frame
+#' 
+#' @param df Input data frame in lasagne format
+#' @param Window window size
+#' @param step step size 
+#' @return result
 slidingWindow <- function( df, window, step){
     seqbegin = df$start[1]
     seqend = df$stop[nrow(df)]
@@ -157,4 +172,3 @@ assign_p <- function(res, null) {
     if (remain>0){ pvals = c( pvals, rep(1, remain)) }
     return(pvals)
 }
-
