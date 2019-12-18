@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 # R version 3.6.2
 # Required packages:
 # - Bioconducter 3.10
@@ -17,12 +19,21 @@
 # take parameters as command line args 
 # verify output 
 
+
+
+
 source("functions.R")
 
 # Lasagna motif matching output for query sequence 
 lasagna_out.query = '/input/E4_out'
 # Lasagne motif matching output for target sequence
 lasagna_out.subject = '/input/human_ch38_scaper_out' 
+
+argv = commandArgs(trailingOnly = TRUE)
+if (length(argv) < 2){
+  stop("Usage: Main.r <query> <target>")
+}
+
 
 # Absolute path to files
 workingdir = getwd()
