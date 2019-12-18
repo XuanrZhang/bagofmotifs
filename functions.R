@@ -134,7 +134,7 @@ bg <- function( f, weights=msig, m1 , window=window, step=step, seedval = seedva
 
     corp2 <- Corpus(VectorSource(df2$motif))
     dtm2 <- DocumentTermMatrix(corp2, control=list(tolower=FALSE))
-    inspect(dtm2)
+    #inspect(dtm2)
     m2 = as.matrix(dtm2) 
     # L2 norm
     m2 = t(apply( m2 , 1, function(x) scalar1(x) ))

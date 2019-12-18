@@ -9,7 +9,7 @@
 # Import GenomocRanges lib for GRanges function
 # Changed query and subject paths to absolute to increase portability
 # small bug cleanups  
-# 18/12/29
+# 18/12/29  
 # added optional seed param to bg function 
 
 # TODO 
@@ -17,9 +17,6 @@
 # verify output 
 
 source("functions.R")
-library(tm)
-library(GenomicRanges)
-
 
 # Lasagna motif matching output for query sequence 
 lasagna_out.query = '/input/E4_out'
@@ -82,9 +79,7 @@ m2 = as.data.frame(m2)
 m2<-weight(m2, msig)
 m2=as.data.frame(m2)
 
-
 # compare based on common motifs 
-# bug: m1 names not in correct format
 common = intersect(names(m1), names(m2))
 m1= m1[,common]
 m2= m2[,common]
@@ -109,26 +104,26 @@ res=res[order(-res$score),]
 res=res[,c(3,1,2)]
 
 # examine top 15
-cs[order(-cs)[1:15]]
-names(cs) = seq(1:length(cs))
-names(cs[order(-cs)[1:15]])
+#cs[order(-cs)[1:15]] # prints to stdout
 
-#---------------------# 
+names(cs) = seq(1:length(cs))
+#names(cs[order(-cs)[1:15]]) # prints to stdout
+
+  #---------------------# 
 # p-val calculations
 #---------------------# 
 
-
 f=lasagna_out.subject
-cs_null=bg(f, weights=msig, m1, window=window, step=step, seedval=42)
-
+cs_null= bg(f, weights=msig, m1, window=window, step=step, seedval=42)
+  
 null=data.frame( bin=df2$bin, score=cs_null)
 null$chr = d2[1,1]  
-null=null[order(-null$score),] # bug?, sets everything to Inf
+null=null[order(-null$score),] 
 null=null[,c(3,1,2)]
 
-  
+    
 res$p=assign_p(res,null) 
 res$padj = p.adjust(res$p, method='fdr')
-
-head(res)
+  
+print(res)
 
