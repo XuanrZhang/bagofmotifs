@@ -4,15 +4,15 @@
 # - tm
 
 # Changelog ~ 
-# 
 # 17/12/19
 # Changed syntax to R 3.6.2 so it talks to current bioconductor lib
 # Import GenomocRanges lib for GRanges function
 # Changed query and subject paths to absolute to increase portability
 # small bug cleanups  
+# 18/12/29
+# added optional seed param to bg function 
 
 # TODO 
-# seed permutation 
 # take parameters as command line args 
 # verify output 
 
@@ -117,15 +117,16 @@ names(cs[order(-cs)[1:15]])
 # p-val calculations
 #---------------------# 
 
+
 f=lasagna_out.subject
-cs_null=bg(f, weights=msig, m1, window=window, step=step)
+cs_null=bg(f, weights=msig, m1, window=window, step=step, seedval=42)
 
 null=data.frame( bin=df2$bin, score=cs_null)
 null$chr = d2[1,1]  
 null=null[order(-null$score),] # bug?, sets everything to Inf
 null=null[,c(3,1,2)]
 
-
+  
 res$p=assign_p(res,null) 
 res$padj = p.adjust(res$p, method='fdr')
 

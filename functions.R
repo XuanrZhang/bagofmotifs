@@ -1,8 +1,6 @@
 library(tm)
 library(GenomicRanges)
 
-
-
 #' Sorts input frame in ascending order according to start
 #' removes duplicates and values in which the p value is > pval  
 #' In df$motif, substitutes all :', '-' and '_' chars with 'X'
@@ -30,8 +28,11 @@ stem <- function(raw) {
 }
 
 randomize <- function(df){
+    
     newdf = data.frame(chr=df$chr, start=df$start, stop=df$stop,
-    strand=df$strand, score=df$score, p_value=df$p_value, motif=sample(df$motif, replace = FALSE))
+    strand=df$strand, score=df$score, 
+        p_value=df$p_value, motif=sample(df$motif, replace = FALSE))
+    
     return(newdf)
 }
 
@@ -58,10 +59,13 @@ slidingWindow <- function( df, window, step){
     bin=sprintf('[%s,%s]', spots,spots_end)
    
     
-    df_gr=with( df,  GRanges( rep('a',nrow(df)) , IRanges(start, stop), str=strand, score=score,p=p_value, motif=motif, contig=chr ))
-    intervals_gr <- GRanges(rep('a',length(spots)), IRanges(start=spots, end=spots_end), names=bin )
+    df_gr=with( df,  GRanges( rep('a',nrow(df)),IRanges(start, stop),
+                              str=strand, score=score,p=p_value, motif=motif, contig=chr ))
+    intervals_gr <- GRanges(rep('a',length(spots)),
+                            IRanges(start=spots, end=spots_end), names=bin )
     ol=as.data.frame(findOverlaps( df_gr, intervals_gr))
-    result = cbind( df[ol$queryHits,],  as.data.frame(intervals_gr)[ ol$subjectHits , ][,c('width','names')])
+    result = cbind( df[ol$queryHits,],
+                    as.data.frame(intervals_gr)[ol$subjectHits,][,c('width','names')])
     names(result)= c("chr", "start", "stop", "strand", "score", "p_value", "motif","width", "bin")
     return(result) 
     }
@@ -114,7 +118,11 @@ weight_by_bg <- function( df, bg_weights ){
 
 scalar1 <- function(x) {x / sqrt(sum(x^2))}
 
-bg <- function( f, weights=msig, m1 , window=window, step=step) {
+bg <- function( f, weights=msig, m1 , window=window, step=step, seedval = seedval) {
+    
+    if ( !missing(seedval)){
+        set.seed(42)
+    }
 
     d2_orig=read.delim(f,header=F,sep='')
     colnames(d2_orig)=c("chr","start","stop","strand","score","p_value","motif")
@@ -131,7 +139,6 @@ bg <- function( f, weights=msig, m1 , window=window, step=step) {
     # L2 norm
     m2 = t(apply( m2 , 1, function(x) scalar1(x) ))
     m2 = as.data.frame(m2)
-
 
     # weight by msig
     m2<-weight(m2, msig)
