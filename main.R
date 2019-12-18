@@ -11,6 +11,7 @@
 # small bug cleanups  
 # 18/12/29  
 # added optional seed param to bg function 
+# Changed script output to the result array 
 
 # TODO 
 # take parameters as command line args 
