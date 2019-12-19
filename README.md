@@ -26,7 +26,7 @@ The following optional flags can be used to set parameters in the program
 Flag | Type | Description | Default
 --- | --- | --- | ---
 -pval | double | Motif discovery threshold | 0.001 
--windowsize | integer | Window size for sliding window function | 900
+-window | integer | Window size for sliding window function | 900
 -seed | integer | Using the same seed will ensure the same sample is taken when calculating emperical null distribution | NULL
 
 ## Input file format
