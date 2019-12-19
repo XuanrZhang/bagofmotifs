@@ -1,28 +1,44 @@
 # bagofmotifs
 
 ## Description 
+Program searches for orthologous gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
+<Br>
+<Br>
+Aligns divergent enhancers based on their collection of binding motifs rather than the standard approach of using sequences alone.
 
 ## Usage
+
+To run the program from the command line, enter:
 
 ```
 ./main.R <query file> <target file>
 ```
 
-Where
-- query file is the location of the query lasagna motif
-- target file is the location of the target lasagna motif
+- Relative path to query file (lasagna motif file)
+- Relative path to target file (lasagna motif file)
 
 ## Command line arguments
 
+The first two arguments must be the query and target motif files.
+
 The following optional flags can be used to set parameters in the program 
 
-Flag | Type | Description
---- | --- | ---
--pval | double | Sets discovery threshold 
+Flag | Type | Description | Default
+--- | --- | --- | ---
+-pval | double | Motif discovery threshold | 0.001 
+-windowsize | integer | Window size for sliding window function | 900
+-seed | integer | Using the same seed will ensure the same sample is taken when calculating emperical null distribution | NULL
 
 ## Input file format
 
 ## Output format
+
+By default output is directed to STDOUT and can be redirected into desired file. e.g.:
+```
+./main.R <query file> <target file> > output.txt
+```
+
+
 
 
 
