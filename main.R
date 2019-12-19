@@ -28,14 +28,50 @@
 
 source("functions.R")
 
+# get command line args
 argv = commandArgs(trailingOnly = TRUE)
 if (length(argv) < 2){
   stop("Usage: Main.r <query> <target>")
 }
 
+# set query and target
 lasagna_out.query = argv[1] # Lasagna motif matching output for query sequence 
 lasagna_out.subject = argv[2] # Lasagne motif matching output for target sequence
 
+# look through any remaining command line args for flags
+arg_pval = NA
+arg_window = NA
+arg_seed = NA
+
+for (i in 3:length(argv)){
+  
+  # pval, double between 0 and 1
+  if( argv[i] == "-pval" || argv[i] == "-p" ){
+    suppressWarnings( (arg_pval = as.double(argv[i+1])) )
+    if (is.na(arg_pval) || !is.numeric(arg_pval) || arg_pval < 0 || arg_pval > 1){
+      stop("Please check pval, it should be numeric, and 0 <= pval <= 1")
+    }
+  }
+  
+  # window, positive integer
+  else if( argv[i] == "-window" || argv[i] == "-w"){
+    suppressWarnings( (arg_window = as.integer(argv[i+1])) )
+    if (is.na(arg_window) || arg_window < 1){
+      stop("Please check window, it should be a positive integer")
+    }
+  }
+    
+  # seed, any integer 
+  else if (argv[i] == "-seed" || argv[i] == "-s"){
+    suppressWarnings( (arg_seed = as.integer(argv[i+1])) )
+    if (is.na(arg_seed)){
+      stop("Please seed flag, it should be an integer")
+    }
+  }
+  
+}
+
+stop("Bye")
 
 # Absolute path to files
 workingdir = getwd()
