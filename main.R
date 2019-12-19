@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/usr/bin/Rscript        
 
 # R version 3.6.2
 # Required packages:
@@ -11,7 +11,7 @@
 # Import GenomocRanges lib for GRanges function
 # Changed query and subject paths to absolute to increase portability
 # small bug cleanups  
-# 18/12/29  
+# 18/12/29    
 # added optional seed param to bg function 
 # Changed script output to the result array 
 
@@ -19,24 +19,27 @@
 # take parameters as command line args 
 # verify output 
 
-
+# input params
+# bin size
+# seed
+# p val 
+# window size 
 
 
 source("functions.R")
-
-# Lasagna motif matching output for query sequence 
-lasagna_out.query = '/input/E4_out'
-# Lasagne motif matching output for target sequence
-lasagna_out.subject = '/input/human_ch38_scaper_out' 
 
 argv = commandArgs(trailingOnly = TRUE)
 if (length(argv) < 2){
   stop("Usage: Main.r <query> <target>")
 }
 
+lasagna_out.query = argv[1] # Lasagna motif matching output for query sequence 
+lasagna_out.subject = argv[2] # Lasagne motif matching output for target sequence
+
 
 # Absolute path to files
 workingdir = getwd()
+workingdir = paste(workingdir, "/", sep='')
 lasagna_out.query = paste(workingdir, lasagna_out.query, sep='')
 lasagna_out.subject = paste(workingdir, lasagna_out.subject, sep = '')
 
@@ -44,13 +47,13 @@ window=900  # set window size larger than length of query
 step=900
 
 # creates data frame containing lasagne output of query 
-d1=read.delim(lasagna_out.query,header=F,sep='') 
-colnames(d1)=c("chr","start","stop","strand","score","p_value","motif")
+invisible((d1=read.delim(lasagna_out.query,header=F,sep='')))
+  colnames(d1)=c("chr","start","stop","strand","score","p_value","motif")
 x=processSingle(d1, pval=0.001)
 x = slidingWindow( x, window, step)
 
 # creates data frame from query data
-# df1[1] is bin
+# df1[1] is bin 
 # df1[2] is motif
 df1 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 
@@ -136,6 +139,6 @@ null=null[,c(3,1,2)]
     
 res$p=assign_p(res,null) 
 res$padj = p.adjust(res$p, method='fdr')
-  
+      
 print(res)
 

@@ -117,7 +117,7 @@ weight_by_bg <- function( df, bg_weights ){
 
 
 scalar1 <- function(x) {x / sqrt(sum(x^2))}
-
+    
 bg <- function( f, weights=msig, m1 , window=window, step=step, seedval = seedval) {
     
     if ( !missing(seedval)){
