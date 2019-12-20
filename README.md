@@ -34,7 +34,7 @@ Flag | Short| Type | Constraints| Description | Default
 
 The input files must be in lasagna output format, a space seperated table with the following fields:
 Chromeosome | Start| End | Strand | Score | Pval | Motif
----- | --- | --- | --- | --- | --- | ---
+--- | --- | --- | --- | --- | --- | ---
 <br>
 
 
