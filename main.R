@@ -17,7 +17,7 @@
 
 # TODO 
 # take parameters as command line args 
-# verify output 
+# verify output   
 
 # input params
 # bin size
@@ -43,11 +43,14 @@ arg_pval = NA
 arg_window = NA
 arg_seed = NA
 
-for (i in 3:length(argv)){
+i = 3 # first optional arg
+while(i <= length(argv)){
   
   # pval, double between 0 and 1
   if( argv[i] == "-pval" || argv[i] == "-p" ){
-    suppressWarnings( (arg_pval = as.double(argv[i+1])) )
+    #suppressWarnings( (arg_pval = as.double(argv[i+1])) )
+    arg_pval = as.double(argv[i+1])
+    print(c("argv: ", arg_pval))
     if (is.na(arg_pval) || !is.numeric(arg_pval) || arg_pval < 0 || arg_pval > 1){
       stop("Please check pval, it should be numeric, and 0 <= pval <= 1")
     }
@@ -65,13 +68,11 @@ for (i in 3:length(argv)){
   else if (argv[i] == "-seed" || argv[i] == "-s"){
     suppressWarnings( (arg_seed = as.integer(argv[i+1])) )
     if (is.na(arg_seed)){
-      stop("Please seed flag, it should be an integer")
+      stop("Please check seed flag, it should be an integer")
     }
   }
-  
+  i=i+1 # step  
 }
-
-stop("Bye")
 
 # Absolute path to files
 workingdir = getwd()
@@ -79,13 +80,30 @@ workingdir = paste(workingdir, "/", sep='')
 lasagna_out.query = paste(workingdir, lasagna_out.query, sep='')
 lasagna_out.subject = paste(workingdir, lasagna_out.subject, sep = '')
 
+# set parameters
+
+# window
 window=900  # set window size larger than length of query
 step=900
+if (! is.na(arg_window)){ window = arg_window }
+
+# pval
+pval_set = 0.001 # default
+if (! is.na(arg_pval)){pval_set = arg_pval}
+
+# seed
+if (is.na(arg_seed)){seed = NULL}else{seed = arg_seed}
+
+# debug input params
+#print(c("Window: ", window))
+#print(c("Pval: ", pval_set))
+#print(c("Seed", seed))
+#stop("Bye")
 
 # creates data frame containing lasagne output of query 
 invisible((d1=read.delim(lasagna_out.query,header=F,sep='')))
-  colnames(d1)=c("chr","start","stop","strand","score","p_value","motif")
-x=processSingle(d1, pval=0.001)
+colnames(d1)=c("chr","start","stop","strand","score","p_value","motif")
+x=processSingle(d1, pval=pval_set)
 x = slidingWindow( x, window, step)
 
 # creates data frame from query data
@@ -97,11 +115,11 @@ df1 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 # msig ~ array of scores(double) named with motifs
 msig <- aggregate(score ~ motif, data = x, max)
 msig <- setNames( msig$score, as.character(msig$motif))
-
+    
 # data frame for subject file (lasagne format)
 d2=read.delim(lasagna_out.subject,header=F,sep='')
 colnames(d2)=c("chr","start","stop","strand","score","p_value","motif")
-x=processSingle(d2, pval=0.01)
+x=processSingle(d2, pval=0.01) #?
 x = slidingWindow( x, window, step)
 df2 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 
@@ -165,7 +183,7 @@ names(cs) = seq(1:length(cs))
 #---------------------# 
 
 f=lasagna_out.subject
-cs_null= bg(f, weights=msig, m1, window=window, step=step, seedval=42)
+cs_null= bg(f, weights=msig, m1, window=window, step=step, seedval=seed)
   
 null=data.frame( bin=df2$bin, score=cs_null)
 null$chr = d2[1,1]  

@@ -179,3 +179,13 @@ assign_p <- function(res, null) {
     if (remain>0){ pvals = c( pvals, rep(1, remain)) }
     return(pvals)
 }
+
+#'Takes command line args as character vector from commandArgs
+#'and processes them into a df
+#'
+#'@param argv
+#'@return
+#process_command_args(argv){
+    
+    
+#   }

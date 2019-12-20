@@ -4,14 +4,15 @@
 Program searches for orthologous gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
 <Br>
 <Br>
-Aligns divergent enhancers based on their collection of binding motifs rather than the standard approach of using sequences alone.
+Aligns divergent enhancers in organisms based on their collection of binding motifs rather than the standard approach of using nucleotide sequences alone.
+
 
 ## Usage
 
 To run the program from the command line, enter:
 
 ```
-./main.R <query file> <target file>
+./main.R <query file> <target file> 
 ```
 
 - Relative path to query file (lasagna motif file)
@@ -30,6 +31,12 @@ Flag | Short| Type | Constraints| Description | Default
 -seed | -s | integer |any integer| Using the same seed will ensure the same sample is taken when calculating emperical null distribution | NULL
 
 ## Input file format
+
+The input files must be in lasagna output format, a space seperated table with the following fields:
+Chromeosome | Start| End | Strand | Score | Pval | Motif
+---- | --- | --- | --- | --- | --- | ---
+<br>
+
 
 ## Output format
 
