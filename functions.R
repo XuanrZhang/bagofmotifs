@@ -46,6 +46,12 @@ slidingWindow <- function( df, window, step){
     seqbegin = df$start[1]
     seqend = df$stop[nrow(df)]
     total = seqend - seqbegin
+    
+    # debug
+    #print("sw")
+    #print(c("window: ", window))
+    #print(c("total", total))
+    
      if (window >= total ){
         result=df
         result$width = total
@@ -183,9 +189,61 @@ assign_p <- function(res, null) {
 #'Takes command line args as character vector from commandArgs
 #'and processes them into a df
 #'
-#'@param argv
-#'@return
-#process_command_args(argv){
+#'@param args array of command line args, including input and output file 
+#'takes output from commandArgs function with trailingOnly=TRUE
+#'@return parameters named list with parameter values
+process_command_args <- function(argv){
+    
+    # set args array containing command line flags
+    if (length(argv) > 2 ) { args = argv[3:length(argv)] }
+    else args = c() 
+    
+    # set parameters list 
+    parameters = as.list(c(NA, NA, NA))
+    names(parameters) <- c("pval", "window", "seed")
+    
+    for(i in 1:length(args)){
+        
+        if(length(args) == 0) {break}
+        
+        # pval, double between 0 and 1
+        if( args[i] == "-pval" || args[i] == "-p" ){
+            suppressWarnings( (parameters[["pval"]] <- as.double(args[i+1])) )
+            if (is.na(parameters[["pval"]]) || !is.numeric(parameters[["pval"]]) ||
+                parameters[["pval"]] < 0 || parameters[["pval"]] > 1){
+                stop("Please check pval, it should be numeric, and 0 <= pval <= 1")
+            }
+        }
+        
+        # window, positive integer
+        else if( args[i] == "-window" || args[i] == "-w"){
+            suppressWarnings( (parameters[["window"]] <- as.integer(args[i+1])) )
+            if (is.na(parameters[["window"]]) || parameters[["window"]] < 1){
+                stop("Please check window, it should be a positive integer")
+            }
+        }
+        
+        # seed, any integer 
+        else if (args[i] == "-seed" || args[i] == "-s"){
+            suppressWarnings( (parameters[["seed"]] <- as.integer(args[i+1])) )
+            if (is.na(parameters[["seed"]])){
+                stop("Please check seed flag, it should be an integer")
+            }
+        }
+    }
+    
+    # set default window and pval if none were supplied
+    # window
+    if (is.na(parameters[["window"]])){parameters[["window"]] <-900} #default
+    # pval
+    if(is.na(parameters[["pval"]]) ){parameters[["pval"]]<-0.001}
     
     
-#   }
+    # debug
+    #print(c("Window: ", parameters[["window"]]))
+    #print(c("Pval: ",parameters[["pval"]] ))
+    #print(c("Seed", parameters[["seed"]]))
+    
+    return(parameters)
+    
+}

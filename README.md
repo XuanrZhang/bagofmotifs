@@ -45,7 +45,15 @@ By default output is directed to STDOUT and can be redirected into desired file.
 ./main.R <query file> <target file> > output.txt
 ```
 
+## Requirements
 
+### Software
+- R version 3.6.*
+- Bioconductor version 3.10
+
+### R Libraries
+- tm
+- GenomicRanges
 
 
 
