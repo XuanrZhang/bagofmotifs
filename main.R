@@ -17,7 +17,8 @@
 
 # TODO 
 # take parameters as command line args 
-# verify output   
+# verify output 
+# should step & binsize = window?
 
 # input params
 # bin size
@@ -28,51 +29,14 @@
 
 source("functions.R")
 
-# get command line args
+
+# query and target files form command line args
 argv = commandArgs(trailingOnly = TRUE)
 if (length(argv) < 2){
   stop("Usage: Main.r <query> <target>")
 }
-
-# set query and target
 lasagna_out.query = argv[1] # Lasagna motif matching output for query sequence 
 lasagna_out.subject = argv[2] # Lasagne motif matching output for target sequence
-
-# look through any remaining command line args for flags
-arg_pval = NA
-arg_window = NA
-arg_seed = NA
-
-i = 3 # first optional arg
-while(i <= length(argv)){
-  
-  # pval, double between 0 and 1
-  if( argv[i] == "-pval" || argv[i] == "-p" ){
-    #suppressWarnings( (arg_pval = as.double(argv[i+1])) )
-    arg_pval = as.double(argv[i+1])
-    print(c("argv: ", arg_pval))
-    if (is.na(arg_pval) || !is.numeric(arg_pval) || arg_pval < 0 || arg_pval > 1){
-      stop("Please check pval, it should be numeric, and 0 <= pval <= 1")
-    }
-  }
-  
-  # window, positive integer
-  else if( argv[i] == "-window" || argv[i] == "-w"){
-    suppressWarnings( (arg_window = as.integer(argv[i+1])) )
-    if (is.na(arg_window) || arg_window < 1){
-      stop("Please check window, it should be a positive integer")
-    }
-  }
-    
-  # seed, any integer 
-  else if (argv[i] == "-seed" || argv[i] == "-s"){
-    suppressWarnings( (arg_seed = as.integer(argv[i+1])) )
-    if (is.na(arg_seed)){
-      stop("Please check seed flag, it should be an integer")
-    }
-  }
-  i=i+1 # step  
-}
 
 # Absolute path to files
 workingdir = getwd()
@@ -80,34 +44,22 @@ workingdir = paste(workingdir, "/", sep='')
 lasagna_out.query = paste(workingdir, lasagna_out.query, sep='')
 lasagna_out.subject = paste(workingdir, lasagna_out.subject, sep = '')
 
-# set parameters
+# Process command line flags
+params = process_command_args(argv)
 
-# window
-window=900  # set window size larger than length of query
-step=900
-if (! is.na(arg_window)){ window = arg_window }
-
-# pval
-pval_set = 0.001 # default
-if (! is.na(arg_pval)){pval_set = arg_pval}
-
-# seed
-if (is.na(arg_seed)){seed = NULL}else{seed = arg_seed}
-
-# debug input params
-#print(c("Window: ", window))
-#print(c("Pval: ", pval_set))
-#print(c("Seed", seed))
-#stop("Bye")
-
+window=params[["window"]]  # set window size larger than length of query
+pvalue = params[["pval"]] 
+seed = params[["seed"]]
+step=900 
+  
 # creates data frame containing lasagne output of query 
 invisible((d1=read.delim(lasagna_out.query,header=F,sep='')))
 colnames(d1)=c("chr","start","stop","strand","score","p_value","motif")
-x=processSingle(d1, pval=pval_set)
+x=processSingle(d1, pval=pvalue) 
 x = slidingWindow( x, window, step)
 
 # creates data frame from query data
-# df1[1] is bin 
+# df1[1] is bin
 # df1[2] is motif
 df1 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 
@@ -115,11 +67,11 @@ df1 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 # msig ~ array of scores(double) named with motifs
 msig <- aggregate(score ~ motif, data = x, max)
 msig <- setNames( msig$score, as.character(msig$motif))
-    
+
 # data frame for subject file (lasagne format)
 d2=read.delim(lasagna_out.subject,header=F,sep='')
 colnames(d2)=c("chr","start","stop","strand","score","p_value","motif")
-x=processSingle(d2, pval=0.01) #?
+x=processSingle(d2, pval=0.01)
 x = slidingWindow( x, window, step)
 df2 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 
@@ -178,21 +130,20 @@ res=res[,c(3,1,2)]
 names(cs) = seq(1:length(cs))
 #names(cs[order(-cs)[1:15]]) # prints to stdout
 
-  #---------------------# 
+#---------------------# 
 # p-val calculations
 #---------------------# 
 
 f=lasagna_out.subject
 cs_null= bg(f, weights=msig, m1, window=window, step=step, seedval=seed)
-  
+
 null=data.frame( bin=df2$bin, score=cs_null)
 null$chr = d2[1,1]  
 null=null[order(-null$score),] 
 null=null[,c(3,1,2)]
 
-    
+
 res$p=assign_p(res,null) 
 res$padj = p.adjust(res$p, method='fdr')
-      
-print(res)
 
+print(res)
