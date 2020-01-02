@@ -49,10 +49,11 @@ params = process_command_args(argv)
 
 window=params[["window"]]  # set window size larger than length of query
 pvalue = params[["pval"]] 
+seed = params[["seed"]]
 step=900 
-
+  
 # creates data frame containing lasagne output of query 
-d1=read.delim(lasagna_out.query,header=F,sep='') 
+invisible((d1=read.delim(lasagna_out.query,header=F,sep='')))
 colnames(d1)=c("chr","start","stop","strand","score","p_value","motif")
 x=processSingle(d1, pval=pvalue) 
 x = slidingWindow( x, window, step)
@@ -134,7 +135,7 @@ names(cs) = seq(1:length(cs))
 #---------------------# 
 
 f=lasagna_out.subject
-cs_null= bg(f, weights=msig, m1, window=window, step=step, seedval=42)
+cs_null= bg(f, weights=msig, m1, window=window, step=step, seedval=seed)
 
 null=data.frame( bin=df2$bin, score=cs_null)
 null$chr = d2[1,1]  
