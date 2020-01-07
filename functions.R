@@ -19,6 +19,9 @@ processSingle  <- function(df, pval=0.01){
     return(df)
 }
 
+#' Removes unwanted characters from motif field in given data grame 
+#' @param raw, data frame with motif field 
+#' @return modified data frame
 stem <- function(raw) {
     raw$motif = gsub("p53", "p53_", raw$motif)
     raw$motif = gsub("NKX6X1", "NKX", raw$motif)
@@ -65,9 +68,9 @@ slidingWindow <- function( df, window, step){
     bin=sprintf('[%s,%s]', spots,spots_end)
    
     
-    df_gr=with( df,  GRanges( rep('a',nrow(df)),IRanges(start, stop),
+    df_gr=with( df,  GenomicRanges::GRanges( rep('a',nrow(df)),IRanges(start, stop),
                               str=strand, score=score,p=p_value, motif=motif, contig=chr ))
-    intervals_gr <- GRanges(rep('a',length(spots)),
+    intervals_gr <- GenomicRanges::GRanges(rep('a',length(spots)),
                             IRanges(start=spots, end=spots_end), names=bin )
     ol=as.data.frame(findOverlaps( df_gr, intervals_gr))
     result = cbind( df[ol$queryHits,],
@@ -91,7 +94,9 @@ cutseq <- function(df, binsize=900) {
 
 cossine <- function( m1, m2 ) {
     rxy <- mapply('*', m2, m1[names(m2)])
-    dpxy = apply(rxy, 1, sum)
+    
+    #debug
+    dpxy = apply(rxy, 1, sum) # err dim(x) must have a positive val
     x = as.matrix(m1)
     dpxx = x %*% t(x)
     y = as.matrix(m2) 
@@ -134,7 +139,8 @@ bg <- function( f, weights=msig, m1 , window=window, step=step, seedval = seedva
     colnames(d2_orig)=c("chr","start","stop","strand","score","p_value","motif")
     x=processSingle(d2_orig)
     x=randomize(x)
-    #x=cutseq(x, binsize=size)
+    #x=cutseq(x, binsize=size) # err size not found
+    #x=cutseq(x, binsize=900) #
     x = slidingWindow( x, window, step)
     df2 <- aggregate(motif ~ bin, data = x, paste, collapse = " ")
 
@@ -159,7 +165,7 @@ bg <- function( f, weights=msig, m1 , window=window, step=step, seedval = seedva
     # m1 is a named vector
 
     rxy <- mapply('*', m2, m1[names(m2)])
-    dpxy = apply(rxy, 1, sum)
+    dpxy = apply(rxy, 1, sum) 
     x = as.matrix(m1)
     dpxx = x %*% t(x)
     y = as.matrix(m2) 
@@ -242,8 +248,8 @@ process_command_args <- function(argv){
     # debug
     #print(c("Window: ", parameters[["window"]]))
     #print(c("Pval: ",parameters[["pval"]] ))
-    #print(c("Seed", parameters[["seed"]]))
-    
+    #print(c("Seed", parameters[["seed"]]))                 
+            
     return(parameters)
     
 }

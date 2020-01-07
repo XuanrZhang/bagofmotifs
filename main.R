@@ -10,13 +10,14 @@
 # Changed syntax to R 3.6.2 so it talks to current bioconductor lib
 # Import GenomocRanges lib for GRanges function
 # Changed query and subject paths to absolute to increase portability
-# small bug cleanups  
-# 18/12/29    
+# small bug cleanups    
+# 18/12/10    
 # added optional seed param to bg function 
 # Changed script output to the result array 
+#02/02/20
+# Command line flags  
 
 # TODO 
-# take parameters as command line args 
 # verify output 
 # should step & binsize = window?
 
@@ -26,9 +27,9 @@
 # p val 
 # window size 
 
-
+# options(error=traceback)
 source("functions.R")
-
+  
 
 # query and target files form command line args
 argv = commandArgs(trailingOnly = TRUE)
@@ -37,6 +38,10 @@ if (length(argv) < 2){
 }
 lasagna_out.query = argv[1] # Lasagna motif matching output for query sequence 
 lasagna_out.subject = argv[2] # Lasagne motif matching output for target sequence
+
+# uncomment for test sequences for debugging 
+# lasagna_out.query = '/input/E4_out'
+# lasagna_out.subject = '/input/human_ch38_scaper_out'
 
 # Absolute path to files
 workingdir = getwd()
@@ -50,7 +55,7 @@ params = process_command_args(argv)
 window=params[["window"]]  # set window size larger than length of query
 pvalue = params[["pval"]] 
 seed = params[["seed"]]
-step=900 
+step=900
   
 # creates data frame containing lasagne output of query 
 invisible((d1=read.delim(lasagna_out.query,header=F,sep='')))
@@ -106,10 +111,18 @@ m1= m1[,common]
 m2= m2[,common]
 
 # cossine similarity comparing x to all blocks in y
-# m1 is a named vector
-
-
+# m1 is a named vector  
 rxy <- mapply('*', m2, m1[names(m2)])
+
+#debug
+#print("main")
+#print(m1)
+#print(m2)
+#print(length(rxy))
+
+# rxy ends up length 0 if target/query incompatible 
+if (length(rxy) == 0){stop("Incorrect window size and/or incompatible query and target sequences")}
+
 dpxy = apply(rxy, 1, sum)
 x = as.matrix(m1)
 dpxx = x %*% t(x)
@@ -118,16 +131,16 @@ dpyy = diag( y %*% t(y) )
 denom = sqrt( rep(dpxx, length(dpyy)) * dpyy )
 cs = dpxy/denom
 
-# bin
+
 res=data.frame( bin=df2$bin, score=cs)
 res$chr = d2[1,1]
 res=res[order(-res$score),]
 res=res[,c(3,1,2)]
 
 # examine top 15
-#cs[order(-cs)[1:15]] # prints to stdout
+# cs[order(-cs)[1:15]] # prints to stdout
 
-names(cs) = seq(1:length(cs))
+#names(cs) = seq(1:length(cs))
 #names(cs[order(-cs)[1:15]]) # prints to stdout
 
 #---------------------# 

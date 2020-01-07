@@ -1,10 +1,10 @@
 # bagofmotifs
 
 ## Description 
-Program searches for orthologous gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
+Program searches for homologous gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
 <Br>
 <Br>
-Aligns divergent enhancers in organisms based on their collection of binding motifs rather than the standard approach of using nucleotide sequences alone.
+Aligns divergent enhancers in organisms based on their collection of binding motifs rather than the standard approach of using position alone.
 
 
 ## Usage
@@ -12,11 +12,13 @@ Aligns divergent enhancers in organisms based on their collection of binding mot
 To run the program from the command line, enter:
 
 ```
-./main.R <query file> <target file> 
+./main.R <query file> <target file> [-pval] [-window] [-seed]
 ```
 
 - Relative path to query file (lasagna motif file)
 - Relative path to target file (lasagna motif file)
+- Optional flags
+<br>
 
 ## Command line arguments
 
@@ -29,6 +31,7 @@ Flag | Short| Type | Constraints| Description | Default
 -pval | -p | double |0 <= pval <= 1| Motif discovery threshold | 0.001 
 -window | -w |integer | window >= 1| Window size for sliding window function | 900
 -seed | -s | integer |any integer| Using the same seed will ensure the same sample is taken when calculating emperical null distribution | NULL
+<br>
 
 ## Input file format
 
@@ -45,6 +48,11 @@ By default output is directed to STDOUT and can be redirected into desired file.
 ./main.R <query file> <target file> > output.txt
 ```
 
+The output is a space delimited table with the following fields:
+|| chr| bin | score | p | padj 
+---- | --- | --- | --- | --- | --- 
+<br>
+
 ## Requirements
 
 ### Software
@@ -54,7 +62,3 @@ By default output is directed to STDOUT and can be redirected into desired file.
 ### R Libraries
 - tm
 - GenomicRanges
-
-
-
-
