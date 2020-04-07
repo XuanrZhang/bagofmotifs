@@ -4,7 +4,7 @@
 Program searches for orthologous gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
 <Br>
 <Br>
-Aligns divergent enhancers in organisms based on their collection of binding motifs rather than the standard approach of using nucleotide sequences alone.
+Aligns divergent enhancers in organisms based on their collection of binding motifs and calculates a p-value based on randomizing the input data.
 
 
 ## Usage
@@ -32,9 +32,9 @@ Flag | Short| Type | Constraints| Description | Default
 
 ## Input file format
 
-The input files must be in lasagna output format, a space seperated table with the following fields:
+The input files should be in this format with a space seperated table with the following fields:
 
-Chromeosome | Start| End | Strand | Score | Pval | Motif
+Chromosome | Start| End | Strand | Score | Pval | Motif
 ---- | --- | --- | --- | --- | --- | ---
 <br>
 
