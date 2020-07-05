@@ -37,19 +37,24 @@ The input files should be in this format with a space seperated table with the f
 Chromosome | Start| End | Strand | Score | Pval | Motif
 ---- | --- | --- | --- | --- | --- | ---
 
-Input files can be generated using any method for identifying motifs and motif database.  
-We have used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC dataset. Lasagna was run on query and target FASTA sequences for each TRANSFAC motif. Results are then appended to construct the input text file.
+Input files can be generated using any method for identifying motifs and motif database. 
 
-```
-python lasagna_scan/scan_UCSC_promoters.py --pvalue 0.01 --compute-pvalue motif_model sequence_file
-```
-Input to scan_UCSC_promoters.py must have the .fa suffix and a header line in the format '>sequenceID:start-end'.
+We have used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC dataset. 
 
-The script lasagna.R generates the input motif file:
+The script lasagna.R wraps scan_UCSC_promoters to generate the input motif file:
 
 ```
 Rscript lasagna_scan/lasagna.R sequence_file
 ```
+
+Lasagna is run on query and target FASTA sequences for each TRANSFAC motif using the following command. 
+
+```
+python lasagna_scan/scan_UCSC_promoters.py --pvalue 0.01 --compute-pvalue motif_model sequence_file
+```
+Input to lasagna.R (and scan_UCSC_promoters.py) must have the .fa suffix and a header line in the format '>sequenceID:start-end'.
+
+
 
 
 <br>
