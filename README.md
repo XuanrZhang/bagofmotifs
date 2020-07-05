@@ -1,7 +1,7 @@
 # bagofmotifs
 
 ## Description 
-Program searches for orthologous gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
+Program searches for similar gene enhancers between query and target sequences using transcription factor binding site motif signatures. 
 <Br>
 <Br>
 Aligns divergent enhancers in organisms based on their collection of binding motifs and calculates a p-value based on randomizing the input data.
@@ -36,14 +36,13 @@ The input files should be in this format with a space seperated table with the f
 
 Chromosome | Start| End | Strand | Score | Pval | Motif
 ---- | --- | --- | --- | --- | --- | ---
-<br>
-Input files can be generated using any method for identifying motifs and using any motif database. We have used Lasagna (PMID: 23522376) with the publicly available version of the TRANSFAC dataset. Lasagna was run on query and target FASTA sequences for each TRANSFAC motif. Results were appended to construct the input text file.
+
+Input files can be generated using any method for identifying motifs and using any motif database. We have used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC dataset. Lasagna was run on query and target FASTA sequences for each TRANSFAC motif. Results were appended to construct the input text file.
 
 ```
 python lasagna_scan/scan_UCSC_promoters.py --pvalue 0.01 --compute-pvalue motif_model sequence_file
 ```
-
-for scan_UCSC_promoters.py input sequence must have the .fa suffix and header line must be the genomic position in the format '>sequenceID:start-end'.
+Input to scan_UCSC_promoters.py must have the .fa suffix and a header line in the format '>sequenceID:start-end'.
 
 The script lasagna.R generates the input motif file:
 
@@ -62,7 +61,7 @@ By default output is directed to STDOUT and can be redirected into desired file.
 ./main.R <query file> <target file> > output.txt
 ```
 ## Motif order test
-Code to test for signficant motif ordering using Smith-Waterman alignment by motif randomization can be found in motifOrder.R
+motifOrder.R contains code to test for conserved motif order using the Smith-Waterman alignment including motif randomization for significance test.
 
 ## Requirements
 
