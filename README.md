@@ -41,15 +41,15 @@ Input files can be generated using any method for identifying motifs and motif d
 
 <br>
 
-We have used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC dataset (both are included in the directory 'lasagna_scan'). 
+We used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC (in directory 'lasagna_scan'). 
 
-Lasagna is first run on query and target FASTA sequences for each TRANSFAC motif using the following command. 
+Lasagna is first run on query and target FASTA sequences for each TRANSFAC motif using the following command:
 ```
 python lasagna_scan/scan_UCSC_promoters.py --pvalue 0.01 --compute-pvalue motif_model sequence_file
 ```
 <br>
 
-We provide code (lasagna.R) to wrap Lasagna's scan_UCSC_promoters.py to generate the input motif file
+We included code (lasagna.R) to wrap Lasagna's scan_UCSC_promoters.py to generate the input motif file to bagofmotifs
 
 ```
 Rscript lasagna_scan/lasagna.R sequence_file
