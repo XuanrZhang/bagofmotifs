@@ -39,7 +39,7 @@ Chromosome | Start| End | Strand | Score | Pval | Motif
 
 Input files can be generated using any method for identifying motifs and motif database. 
 
-
+<br>
 
 We have used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC dataset (both are included in the directory 'lasagna_scan'). 
 
@@ -47,14 +47,14 @@ Lasagna is first run on query and target FASTA sequences for each TRANSFAC motif
 ```
 python lasagna_scan/scan_UCSC_promoters.py --pvalue 0.01 --compute-pvalue motif_model sequence_file
 ```
-Note: Input to lasagna.R (and scan_UCSC_promoters.py) must have the .fa suffix and a header line in the format '>sequenceID:start-end'.
-
+<br>
 
 We provide code (lasagna.R) to wrap Lasagna's scan_UCSC_promoters.py to generate the input motif file
 
 ```
 Rscript lasagna_scan/lasagna.R sequence_file
 ```
+Note: Input to lasagna.R (and scan_UCSC_promoters.py) must have the .fa suffix and a header line in the format '>sequenceID:start-end'.
 
 
 
