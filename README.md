@@ -69,7 +69,7 @@ By default output is directed to STDOUT and can be redirected into desired file.
 ./main.R <query file> <target file> > output.txt
 ```
 ## Motif order test
-motifOrder.R contains code to test for conserved motif order using the Smith-Waterman alignment including randomization for accessing statistical significance.
+motifOrder.R contains code to test for conserved motif order using the Smith-Waterman alignment including randomization to test statistical significance.
 
 ## Requirements
 
