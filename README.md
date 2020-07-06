@@ -80,7 +80,7 @@ motifOrder.R contains code to test for conserved motif order using the Smith-Wat
 ### R Libraries
 - tm
 - GenomicRanges
-- Biostrings (motif comparison)
+- Biostrings (motif order comparison)
 
 
 
