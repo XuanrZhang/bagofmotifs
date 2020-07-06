@@ -37,9 +37,9 @@ The input files should be in this format with a space seperated table with the f
 Chromosome | Start| End | Strand | Score | Pval | Motif
 ---- | --- | --- | --- | --- | --- | ---
 
-Input files can be generated using any method for identifying motifs and motif database. 
-
 <br>
+
+Input files can be generated using any method for identifying motifs and motif database. 
 
 We used Lasagna (PMID: 23522376) with a publicly available version of the TRANSFAC (in directory 'lasagna_scan'). 
 
@@ -49,7 +49,7 @@ python lasagna_scan/scan_UCSC_promoters.py --pvalue 0.01 --compute-pvalue motif_
 ```
 <br>
 
-We included code (lasagna.R) to wrap Lasagna's scan_UCSC_promoters.py to generate the input motif file to bagofmotifs
+We included code to wrap Lasagna's scan_UCSC_promoters.py to generate the input motif file to bagofmotifs:
 
 ```
 Rscript lasagna_scan/lasagna.R sequence_file
