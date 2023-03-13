@@ -1,6 +1,8 @@
 ## Code and trained-models provided for method comparison section
 
-In this file folder, we provided all code for method comparison, including three neural network methods for <u>**multi-classification comparison**</u> and machine learning method gkm-SVM for <u>**binary classification comparison**</u>.
+In this file folder, we provided all code for method comparison, including three neural network methods for 
+<u>multi-classification comparison</u> and machine learning method gkm-SVM for 
+<u>binary classification comparison</u>.
 
 ### Multi-classification comparison with neural network methods
 
