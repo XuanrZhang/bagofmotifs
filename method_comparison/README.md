@@ -1,6 +1,10 @@
 ## Code and trained-models provided for method comparison section
 
-In this file folder, we provided all code for method comparison, including three neural network methods.
+In this file folder, we provided all code for method comparison, including three neural network methods for multi-classification comparison and machine learning method gkm-SVM for binary classification comparison.
+
+### Multi-classification comparison with neural network methods
+
+We compared with three representative neural network methods.
 
 - Basset-2016 (see 'Basset_model.ipynb')
 - DeepSTARR-2020 (see 'deepSTARR_model.ipynb')
@@ -12,5 +16,7 @@ In this study, we trained the model on mouse development data (E8.25) using the 
 
 If you prefer not to retrain the models, you can directly load our trained model files (located in the ./models folder).
 
-Any problems during your running, please email to x.zhang@victorchang.edu.au
+### Binary-classification comparison with classical machine learning method - gkm-SVM
+
+
 
