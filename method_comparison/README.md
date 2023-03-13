@@ -4,14 +4,11 @@ In this file folder, we provided all code for method comparison, including three
 - DeepSTARR-2020 (see 'deepSTARR_model.ipynb')
 - DeepMEL-2020 (see 'deepMel_model.ipynb')
 
-For a fair comparion, we used 500bp sequences from the center of peaks and their reverse_complement sequences to double our samples. 
-For each method, we reimplemented their methods according to their works, and only modified the output layer (n=17) to predict 17 cell-type specific enhancers.
-More details of those methods can be found in their github.
+For a fair comparison, we used 500bp sequences from the center of peaks and their reverse complement sequences to double our sample size. For each method, we re-implemented their approaches according to their neural network architecture and only modified the output layer (n=17) to predict 17 cell-type-specific enhancers. More details about these methods can be found on their GitHub pages.
 
-In this work, we trained model on mouse development data (E8.25) with arguments (Epochs = 100; Batchsize = 128; earlystopping =10), more details of model training and evaluation can be found in the scirpts.
+In this study, we trained the model on mouse development data (E8.25) using the following parameters: Epochs = 100, Batch size = 128, Early stopping = 10. We saved the best val_loss model to perform further evaluation.  Additional details regarding model training and evaluation can be found in the scripts.
 
-If you don't want to re-train the models, you can directly re-load our trained model files (see ./models file folder)
-
+If you prefer not to retrain the models, you can directly load our trained model files (located in the ./models folder).
 
 Any problems during your running, please email to x.zhang@victorchang.edu.au
 
