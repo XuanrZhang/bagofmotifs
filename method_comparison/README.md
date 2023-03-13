@@ -20,5 +20,4 @@ If you prefer not to retrain the models, you can directly load our trained model
 
 ### Binary-classification comparison with classical machine learning method - gkm-SVM
 
-
-
+We compared with gkm-SVM.
