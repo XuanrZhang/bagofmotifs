@@ -1,3 +1,5 @@
+## Code and trained-models provided for method comparison section
+
 In this file folder, we provided all code for method comparison, including three neural network methods.
 
 - Basset-2016 (see 'Basset_model.ipynb')
