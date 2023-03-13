@@ -1,8 +1,8 @@
 In this file folder, we provided all code for method comparison, including three neural network methods.
 
-- Basset-2016 (see '')
-- DeepSTARR-2020 (see '')
-- DeepMEL-2020 (see '')
+- Basset-2016 (see 'Basset_model.ipynb')
+- DeepSTARR-2020 (see 'deepSTARR_model.ipynb')
+- DeepMEL-2020 (see 'deepMel_model.ipynb')
 
 For a fair comparion, we used 500bp sequences from the center of peaks and their reverse_complement sequences to double our samples. 
 For each method, we reimplemented their methods according to their works, and only modified the output layer (n=17) to predict 17 cell-type specific enhancers.
